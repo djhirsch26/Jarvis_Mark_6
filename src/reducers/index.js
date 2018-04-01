@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux';
+import inputReducer from './inputReducer';
+import displayReducer from './displayReducer';
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state
+  input: inputReducer,
+  display: displayReducer,
 });
 
 export default rootReducer;

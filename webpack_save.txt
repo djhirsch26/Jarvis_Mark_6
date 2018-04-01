@@ -11,7 +11,7 @@ module.exports = {
     loaders: [
       {
       exclude: /node_modules\/(?!(react-file-viewer)\/).*/,
-      loader: 'babel-loader',
+      loader: 'babel',
       query: {
         presets: ['react', 'es2015', 'stage-1']
       }
@@ -19,7 +19,7 @@ module.exports = {
   ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.scss']
+    extensions: ['', '.js', '.jsx', '.scss']
   },
   devServer: {
     historyApiFallback: true,
