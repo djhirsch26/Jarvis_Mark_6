@@ -2,7 +2,7 @@ import {
 	UPDATE_INPUT,
 	MESSAGE_RECIEVED,
 	MUSIC_RECIEVED,
-} from '../actions';
+} from '../utils/commands';
 
 var initialState = {
 	current_input: "",
@@ -16,7 +16,7 @@ export default function(state=initialState, action) {
     return {...state, current_input: action.payload};
 	case MESSAGE_RECIEVED:
 		console.log("MESSAGE PAYLOAD: " + action.payload);
-		return {...state, message: action.payload}
+		return {...state, message: action.payload.message}
 	case MUSIC_RECIEVED:
 		console.log("Music PAYLOAD: " + action.payload);
 		return {...state, music: action.payload}

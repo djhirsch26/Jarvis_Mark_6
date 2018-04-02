@@ -1,36 +1,72 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
-
-import {getFile} from '../actions';
-
 import List from 'react-list-select'
+import FileViewer from 'react-file-viewer';
+
+import {FS_URL} from '../constance';
+import {
+  setFile,
+  closeFileView,
+} from '../actions';
+
+
+const path = require('path');
 
 class DisplayBox extends Component {
   constructor(props) {
     super(props)
-    this.state = {fileView: false}
   }
 
-  onListSelect(list, number) {
+  onListSelect(list, command, number) {
     return function(number) {
-      console.log(list[number]);
-      this.props.getFile(list[number])
+      switch(command) {
+        default:
+        //this.props.closeFileView()
+        // console.log(list[number]);
+        this.props.setFile(number)
+      }
     }
   }
 
+  onError() {
+
+  }
+
+  onCloseClick() {
+    console.log("HERE")
+    this.props.closeFileView()
+  }
+
   render() {
-    console.log(this.props.lists)
-    const renderedLists = this.props.lists.map(list =>
-      <div key={list}>
+    //LC = list_command
+    const renderedLists = this.props.lists.map(lc =>
+      <div key={lc.list}>
         <p>Please choose one of the following</p>
-        <List items={list} onChange={this.onListSelect(list).bind(this)}/>
+        <List items={lc.list} onChange={this.onListSelect(lc.list, lc.command).bind(this)}/>
       </div>
     )
 
+    const file = FS_URL + this.props.files[this.props.file_index];
+    const type = path.extname(file).substr(1)
+    const fileviewer = this.props.fileView ?
+    <div>
+      <button onClick={this.onCloseClick.bind(this)}>Close_File</button>
+      <FileViewer
+        fileType={type}
+        filePath={file}
+        onError={this.onError.bind(this)}
+        errorComponent={<div>NOPE</div>}
+        ref={(n) => this.fref=n}
+      />
+    </div>
+    : <div>NOPE</div>;
+
+      console.log('h',fileviewer)
     return (
-      <div className="display_box" style={{display: 'flex', justifyContent: 'center'}}>
-      {renderedLists}
+      <div className="display_box">
+        {renderedLists}
+        {fileviewer}
       </div>
     );
   }
@@ -38,13 +74,17 @@ class DisplayBox extends Component {
 
 function mapStateToProps(state) {
   return {
-    lists: state.display.lists
+    lists: state.display.lists,
+    fileView: state.file.fileView,
+    files: state.file.files,
+    file_index: state.file.file_index
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    getFile: getFile
+    setFile: setFile,
+    closeFileView: closeFileView,
   }, dispatch);
 }
 

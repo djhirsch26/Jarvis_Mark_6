@@ -1,20 +1,22 @@
 import {API} from '../utils/API';
 
-export const MESSAGE_RECIEVED = 'message-recieved';
-export const MUSIC_RECIEVED = 'music-recieved';
+import {
+  MESSAGE_RECIEVED,
+  MUSIC_RECIEVED,
+  GET_FILE,
+} from '../utils/commands';
 
 export function submitMessage(message, callback) {
   const request = API.submitMessage(message);
   return (dispatch) => {
     request.then((result) => {
       callback(result.data)
-      var {file} = result.data;
       dispatch({
         type: MESSAGE_RECIEVED,
-        payload: file
+        payload: result.data
       })
     }).catch((e) =>{
-    console.log("POST Message ERROR: "+e);
+    console.log("POST Message ERROR: ",e);
   })
   }
 }
@@ -28,7 +30,13 @@ export function getFile(file_name, callback) {
       if(callback) {
         callback(result);
       }
-    })
+      dispatch({
+        type: GET_FILE,
+        payload: {file: result.data}
+      })
+    }).catch((e) =>{
+    console.log("getFile ERROR: "+e);
+  })
   }
 }
 

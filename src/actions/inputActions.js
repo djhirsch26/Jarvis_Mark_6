@@ -1,4 +1,8 @@
-export const UPDATE_INPUT = 'update-input';
+var commands = require('../utils/commands');
+
+import {
+  UPDATE_INPUT
+} from '../utils/commands'
 
 export function update_input(value) {
   return {

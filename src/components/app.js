@@ -14,8 +14,10 @@ import InputBox from './input_box';
 import AudioPlayer from './audio_player';
 import DisplayBox from './display_box';
 
-import commands_ from '../utils/commands'
-var {commands} = commands_;
+import {
+  SET_FILE,
+  CHOOSE_FILE,
+} from '../utils/commands'
 
 class App extends Component {
 
@@ -30,14 +32,15 @@ class App extends Component {
 
 /** Recieves a sentBack, which is a message and a payload*/
   submitCallback(data) {
+    console.log(data)
     var {payload} = data
     if (payload) {
-      switch(payload.type) {
-        case commands.CHOOSE:
-        this.props.addList(payload.file)
-        break;
+      switch(data.command) {
+        case CHOOSE_FILE:
+          this.props.addList(payload, SET_FILE)
+          break;
         default:
-        break;
+          break;
       }
     }
   }
